@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aniversário do Edu - 20 Anos</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0d274d; 
+            background-image: radial-gradient(circle, #1a4a8c 20%, #0d274d 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Comic Neue', cursive;
+            overflow: hidden; 
+        }
+
+        #envelope-container {
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.3s;
+            z-index: 100;
+        }
+        
+        #envelope-container:hover {
+            transform: scale(1.1) rotate(-3deg);
+        }
+        
+        .envelope {
+            width: 300px;
+            height: 200px;
+            background-color: #d11a2a; 
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 3px solid #000;
+        }
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-left: 147px solid transparent;
+            border-right: 147px solid transparent;
+            border-top: 100px solid #a80010; 
+            z-index: 2;
+        }
+        
+        .envelope-text {
+            position: absolute;
+            bottom: 20px;
+            color: #fff;
+            font-family: 'Bangers', cursive;
+            font-size: 2rem;
+            text-shadow: 2px 2px 0 #000;
+            z-index: 3;
+            letter-spacing: 2px;
+            animation: piscar 1.5s infinite;
+        }
+
+        @keyframes piscar {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        #content-container {
+            display: none; 
+            text-align: center;
+            max-width: 650px;
+            width: 90%;
+            max-height: 90vh; 
+            overflow-y: auto; 
+            background-color: #ffffff;
+            padding: 30px 20px;
+            border-radius: 20px;
+            border: 8px dashed #0033cc;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.1);
+            animation: pular 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 50; 
+        }
+
+        #content-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        @keyframes pular {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .imagem-extra {
+            max-width: 200px;
+            height: auto;
+            margin: 15px auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: block;
+        }
+
+        .faixa-nome {
+            background-color: #d11a2a; 
+            color: #fff;
+            font-family: 'Bangers', cursive;
+            font-size: 3.5rem;
+            padding: 5px 60px;
+            display: inline-block;
+            border: 4px solid #000;
+            text-shadow: 3px 3px 0 #000;
+            box-shadow: 0 8px 0 rgba(0,0,0,0.2);
+            position: relative;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            z-index: 15;
+            clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
+        }
+
+        h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 3.5rem;
+            color: #d11a2a; 
+            margin: 10px 0;
+            text-shadow: 3px 3px 0px #000;
+            line-height: 1.1;
+        }
+
+        .vela {
+            font-family: 'Bangers', cursive;
+            font-size: 2.2rem;
+            color: #ff9900;
+            margin: 0;
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        p.mensagem {
+            font-size: 1.5rem;
+            line-height: 1.4;
+            color: #000;
+            margin-top: 20px; 
+            padding: 0 15px;
+            font-weight: bold;
+        }
+
+        #baloes-container {
+            display: none;
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999; 
+        }
+
+        .balao {
+            width: 60px;
+            height: 80px;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -100px; 
+            box-shadow: inset -10px -10px 15px rgba(0,0,0,0.2);
+            animation: subir 6s ease-in forwards;
+        }
+        
+        .balao::before {
+            content: "";
+            position: absolute;
+            bottom: -12px;
+            left: 22px;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 15px solid;
+        }
+        
+        .balao::after {
+            content: "";
+            position: absolute;
+            bottom: -60px;
+            left: 29px;
+            width: 2px;
+            height: 50px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .b-vermelho { background-color: #e23636; }
+        .b-vermelho::before { border-bottom-color: #e23636; }
+        .b-azul { background-color: #0033cc; }
+        .b-azul::before { border-bottom-color: #0033cc; }
+
+        @keyframes subir {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-120vh) rotate(15deg); opacity: 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="envelope-container" onclick="abrirCarta()">
+        <div class="envelope">
+            <span class="envelope-text">ABRIR!</span>
+        </div>
+    </div>
+
+    <div id="baloes-container">
+        <div class="balao b-vermelho" style="left: 10%; animation-delay: 0.5s;"></div>
+        <div class="balao b-azul" style="left: 25%; animation-delay: 1.2s;"></div>
+        <div class="balao b-vermelho" style="left: 45%; animation-delay: 0s;"></div>
+        <div class="balao b-azul" style="left: 65%; animation-delay: 1.8s;"></div>
+        <div class="balao b-vermelho" style="left: 85%; animation-delay: 0.8s;"></div>
+    </div>
+
+    <div id="content-container">
+        
+        <div class="faixa-nome">EDU</div>
+
+        <div class="vela">🕯️ 20 ANOS 🕯️</div>
+        <h1>FELIZ ANIVERSÁRIO,<br>MEUS PARABÉNS!</h1>
+        
+        <img src="edu_miranha.png" alt="Imagem do Aranha" class="imagem-extra">
+
+        <p class="mensagem">
+            Meu caro Eduardo de Jesus Rocha, é com imenso prazer que desejo um feliz aniversário, agradeço por me dar oportunidade de viver minha vida junto ao seu lado! Eu te amo.
+        </p>
+    </div>
+
+    <audio id="musica" src="xuxa_parabens.mp3" preload="auto"></audio>
+
+    <script>
+        function abrirCarta() {
+            document.getElementById('envelope-container').style.display = 'none';
+            document.getElementById('content-container').style.display = 'block';
+
+            var audio = document.getElementById('musica');
+            audio.play().catch(e => console.log("Áudio bloqueado pelo navegador"));
+
+            var duration = 4 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 40, spread: 360, ticks: 60, zIndex: 10000 };
+
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) { return clearInterval(interval); }
+                var particleCount = 50 * (timeLeft / duration);
+                
+                confetti(Object.assign({}, defaults, { particleCount, colors: ['#d11a2a', '#0033cc', '#ffffff'], origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, colors: ['#d11a2a', '#0033cc', '#ffffff'], origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+
+            setTimeout(() => {
+                document.getElementById('baloes-container').style.display = 'block';
+            }, 500); 
+        }
+    </script>
+
+</body>
+</html>
